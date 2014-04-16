@@ -15,6 +15,7 @@ define(function (require, exports, module) {
 
     var $icon     = $("<a id='chrome-ext-toolbar-icon' href='#'></a>").attr("title", "Launch Chrome Extension").appendTo($("#main-toolbar .buttons"));
 
+    ExtensionUtils.loadStyleSheet(module, "styles/chrome-ext.css");
 
     function launchChrome() {
         var launchDomain = new NodeDomain("chrome-launcher", ExtensionUtils.getModulePath(module, "launchChrome"));
