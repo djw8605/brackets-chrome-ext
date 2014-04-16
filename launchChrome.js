@@ -8,6 +8,29 @@ maxerr: 50, node: true */
 
     var ChildProcess   = require("child_process");
     var temp           = require("./thirdparty/temp");
+    var chromeStartupArguments = " --no-first-run --no-default-browser-check";
+    var fs             = require("fs");
+
+
+    // Remove a non-empty directory
+    function deleteFolderRecursive(path) {
+
+        var files = [];
+        if (fs.existsSync(path)) {
+            files = fs.readdirSync(path);
+            files.forEach(function (file, index) {
+                var curPath = path + "/" + file;
+                if (fs.lstatSync(curPath).isDirectory()) { // recurse
+                    deleteFolderRecursive(curPath);
+                } else { // delete file
+                    fs.unlinkSync(curPath);
+                }
+            });
+            fs.rmdirSync(path);
+        }
+    }
+
+
 
     function launchChrome(projectDirectory) {
         // According to https://developer.chrome.com/apps/first_app
@@ -15,10 +38,12 @@ maxerr: 50, node: true */
         // --load-and-launch-app=/path/to/app/
         temp.mkdir("chrome-ext", function (err, tmpDir) {
             var chromeLocation = "/Applications/Google\\ \\Chrome.app/Contents/MacOS/Google\\ \\Chrome";
-            var chromeArguments = "--load-and-launch-app=" + projectDirectory + " --user-data-dir=" + tmpDir;
+            var chromeArguments = "--load-and-launch-app=" + projectDirectory + " --user-data-dir=" + tmpDir + chromeStartupArguments;
 
             var child = ChildProcess.exec(chromeLocation + " " + chromeArguments,
                 function (error, stdout, stderr) {
+                    // After the child process has exited, remove the tmp profile directory
+                    deleteFolderRecursive(tmpDir);
                     console.log('stdout: ' + stdout);
                     console.log('stderr: ' + stderr);
                     if (error !== null) {
