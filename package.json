@@ -1,0 +1,15 @@
+
+{
+    "name": "djw8605.brackets-chrome-ext",
+    "title": "Brackets Chrome Extension Launcher",
+    "description": "More useful details to let someone know what your extension is all about.",
+    "homepage": "https://github.com/djw8605/brackets-chrome-ext",
+    "version": "1.0.0",
+    "author": "Derek Weitzel <djw8605@gmail.com> (http://github.com/djw8605)",
+    "license": "MIT",
+    "engines": {
+        "brackets": ">=0.24.0"
+    }
+}
+
+
