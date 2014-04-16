@@ -18,6 +18,7 @@ define(function (require, exports, module) {
     ExtensionUtils.loadStyleSheet(module, "styles/chrome-ext.css");
 
     function launchChrome() {
+        $icon.addClass('on');
         var launchDomain = new NodeDomain("chrome-launcher", ExtensionUtils.getModulePath(module, "launchChrome"));
         launchDomain.exec("launchChrome", ProjectManager.getProjectRoot().fullPath)
             .done(function (success) {
