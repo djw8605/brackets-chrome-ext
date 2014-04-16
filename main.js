@@ -27,6 +27,14 @@ define(function (require, exports, module) {
                 console.error("Error calling domain", err);
             });
 
+        // Now listen for the shutdown event
+        $(launchDomain).on('chrome:close', function (evt) {
+
+            $icon.removeClass('on');
+            console.log("Chrome has closed");
+
+        });
+
     }
 
     // Init the user interface
