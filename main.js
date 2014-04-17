@@ -46,11 +46,9 @@ define(function (require, exports, module) {
         // Get all the files in the project
         $icon.hide();
         ProjectManager.getAllFiles(false).then(function (files) {
-            console.log("Got files: ");
-            console.log(files);
 
             files.forEach(function (value, index, files) {
-                console.log(value.name);
+
                 if (value.name === "manifest.json") {
                     // Found a manifest.json.  See if it matches a typical chrome extension / app
 
@@ -59,13 +57,13 @@ define(function (require, exports, module) {
                         // Parse the manifest
                         var manifestObj = JSON.parse(contents);
 
-                        // Check the structure
+                        // Check the structure of the manifest.json
                         if (manifestObj.hasOwnProperty('name') &&
                                 manifestObj.hasOwnProperty('version')) {
 
                             $icon.show();
                         }
-                        console.log(contents);
+
                     });
                 }
 
@@ -74,6 +72,7 @@ define(function (require, exports, module) {
         });
     }
 
+    // When a project is opened, check for the manifest.json file
     $(ProjectManager).on("projectOpen", _checkManifest);
 
     AppInit.htmlReady(function () {
