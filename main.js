@@ -13,7 +13,7 @@ define(function (require, exports, module) {
         NodeDomain     = brackets.getModule("utils/NodeDomain");
 
 
-    var $icon     = $("<a id='chrome-ext-toolbar-icon' href='#'></a>").attr("title", "Launch Chrome Extension").appendTo($("#main-toolbar .buttons"));
+    var $icon = $("<a id='chrome-ext-toolbar-icon' href='#'></a>").attr("title", "Launch Chrome Extension").appendTo($("#main-toolbar .buttons")).hide();
 
     ExtensionUtils.loadStyleSheet(module, "styles/chrome-ext.css");
 
@@ -42,10 +42,43 @@ define(function (require, exports, module) {
         $icon.on("click", launchChrome);
     }
 
+    function _checkManifest(event) {
+        // Get all the files in the project
+        $icon.hide();
+        ProjectManager.getAllFiles(false).then(function (files) {
+            console.log("Got files: ");
+            console.log(files);
 
+            files.forEach(function (value, index, files) {
+                console.log(value.name);
+                if (value.name === "manifest.json") {
+                    // Found a manifest.json.  See if it matches a typical chrome extension / app
+
+                    value.read(function (error, contents, stats) {
+
+                        // Parse the manifest
+                        var manifestObj = JSON.parse(contents);
+
+                        // Check the structure
+                        if (manifestObj.hasOwnProperty('name') &&
+                                manifestObj.hasOwnProperty('version')) {
+
+                            $icon.show();
+                        }
+                        console.log(contents);
+                    });
+                }
+
+            });
+
+        });
+    }
+
+    $(ProjectManager).on("projectOpen", _checkManifest);
 
     AppInit.htmlReady(function () {
         initUi();
+
     });
 
 });
